@@ -1,5 +1,16 @@
 #!/bin/bash
 
+
+LOG_FILE="sys_monitor.log"
+
+mkdir -p "$(dirname "$LOG_FILE")"
+
+exec > >(
+	while read -r line; do
+		echo "$(date '+%Y-%m-%d %H-%M-%S') $line"
+	done | tee -a "$LOG_FILE"	
+	) 2>&1
+
 ram_threshold_high=60
 ram_threshold_mod=30
 
@@ -8,6 +19,11 @@ disk_threshold_mod=30
 
 current_ram=$(free -m | awk '/Mem:/ {print int($3/$2*100)}')
 current_disk=$(df -k / | awk 'NR==2 {print int($3/$2*100)}')
+
+
+echo "==========================="
+echo "	System Health Status	"
+echo "==========================="
 
 echo "Ram usage of your system: ${current_ram}%"
 
@@ -19,6 +35,8 @@ else
 	echo "RAM uasge is low at ${current_ram}%, nice"
 fi
 
+echo "----------------------"
+
 echo "Disk usage of your system is: ${current_disk}%"
 if [ "$current_disk" -gt "$disk_threshold_high" ]; then
 	echo "Disk usage is critically high, at ${current_disk}%!!!"
@@ -27,6 +45,8 @@ elif [ "$current_disk" -gt "$disk_threshold_mod" ]; then
 else
 	echo "Disk usage is low at ${current_disk}%, nice"
 fi
+
+echo "----------------------"
 
 threshold_high=60
 threshold_mod=20
@@ -41,4 +61,8 @@ elif [ "$cpu_usage" -gt "$threshold_mod" ]; then
 else 
 	echo "Your cpu load is fine as ${cpu_usage}% is low, less power usage and system stays cools "
 fi
+
+echo "-----------------------" 
+
+echo "=====END OF SYSTEM DIAGNOSIS====="
 
