@@ -7,9 +7,8 @@
 
 ----
 
-Contact me: alishthapa45@gmail.com 
-	     
-		  : learningvia6@gmail.com
+Contact me: alishthapa45@gmail.com  or 
+          : learningvia6@gmail.com
 
 ---
 
